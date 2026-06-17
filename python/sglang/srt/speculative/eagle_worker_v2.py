@@ -82,6 +82,7 @@ from sglang.srt.speculative.spec_utils import (
     select_top_k_tokens,
     spec_stage_span,
 )
+from sglang.srt.speculative.spec_verify_profiler import run_with_spec_verify_profile
 from sglang.srt.utils.async_probe import (
     maybe_detect_inf,
     maybe_detect_nan,
@@ -1383,10 +1384,24 @@ class EAGLEWorkerV2(BaseSpecWorker):
         # eagle_prepare_for_verify marked the batch in exactly that case; the
         # non-cuda-graph path stays unmarked and gets forward_extend's init
         # (post-pad).
-        forward_batch_output = self.target_worker.forward_batch_generation(
-            batch=None,
-            forward_batch=verify_forward_batch,
-            is_verify=True,
+        forward_batch_output = run_with_spec_verify_profile(
+            lambda: self.target_worker.forward_batch_generation(
+                batch=None,
+                forward_batch=verify_forward_batch,
+                is_verify=True,
+            ),
+            algorithm=self.speculative_algorithm.name,
+            batch_size=bs,
+            draft_token_num=int(self.speculative_num_draft_tokens),
+            can_run_cuda_graph=can_run_cuda_graph,
+            device=self.device,
+            seq_lens=verify_forward_batch.seq_lens,
+            seq_lens_sum=verify_forward_batch.seq_lens_sum,
+            tp_rank=self.tp_rank,
+            dp_rank=getattr(self, "dp_rank", None),
+            attention_backend=type(
+                self.target_worker.model_runner.attn_backend
+            ).__name__,
         )
         logits_output = forward_batch_output.logits_output
 

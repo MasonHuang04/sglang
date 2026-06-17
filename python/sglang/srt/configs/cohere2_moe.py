@@ -5,11 +5,22 @@ from transformers.configuration_utils import PreTrainedConfig
 from transformers.models.auto.configuration_auto import CONFIG_MAPPING
 
 try:
-    from huggingface_hub.dataclasses import strict
+    from huggingface_hub.dataclasses import (
+        StrictDataclassDefinitionError,
+        strict as _hf_strict,
+    )
 except ImportError:  # older huggingface_hub
 
     def strict(cls):  # type: ignore[misc]
         return cls
+
+else:
+
+    def strict(cls):  # type: ignore[misc]
+        try:
+            return _hf_strict(cls)
+        except StrictDataclassDefinitionError:
+            return cls
 
 
 @strict

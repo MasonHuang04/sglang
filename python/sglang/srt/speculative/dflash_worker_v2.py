@@ -34,6 +34,7 @@ from sglang.srt.speculative.dflash_utils import (
 from sglang.srt.speculative.eagle_info_v2 import assign_extend_cache_locs_func
 from sglang.srt.speculative.spec_info import SpeculativeAlgorithm
 from sglang.srt.speculative.spec_utils import assign_req_to_token_pool_func
+from sglang.srt.speculative.spec_verify_profiler import run_with_spec_verify_profile
 from sglang.srt.speculative.triton_ops.dflash_accept_bonus import (
     _compute_dflash_accept_bonus_triton_unchecked,
 )
@@ -1524,17 +1525,31 @@ class DFlashWorkerV2(BaseSpecWorker):
             model_worker_batch.seq_lens_cpu = draft_input.reserved_seq_lens_cpu
             model_worker_batch.seq_lens_sum = int(draft_input.reserved_seq_lens_sum)
 
-        verify_forward_batch, _ = verify_input.prepare_for_verify(
+        verify_forward_batch, can_run_cuda_graph = verify_input.prepare_for_verify(
             model_worker_batch, self.target_worker
         )
         model_worker_batch.seq_lens_cpu = seq_lens_cpu_backup
         model_worker_batch.seq_lens_sum = seq_lens_sum_backup
 
-        target_out = self.target_worker.forward_batch_generation(
-            batch=None,
-            forward_batch=verify_forward_batch,
-            is_verify=True,
-            skip_attn_backend_init=True,
+        target_out = run_with_spec_verify_profile(
+            lambda: self.target_worker.forward_batch_generation(
+                batch=None,
+                forward_batch=verify_forward_batch,
+                is_verify=True,
+                skip_attn_backend_init=True,
+            ),
+            algorithm=SpeculativeAlgorithm.DFLASH.name,
+            batch_size=bs,
+            draft_token_num=int(self.block_size),
+            can_run_cuda_graph=can_run_cuda_graph,
+            device=self.device,
+            seq_lens=verify_forward_batch.seq_lens,
+            seq_lens_sum=verify_forward_batch.seq_lens_sum,
+            tp_rank=self.tp_rank,
+            dp_rank=self.dp_rank,
+            attention_backend=type(
+                self.target_worker.model_runner.attn_backend
+            ).__name__,
         )
         logits_output = target_out.logits_output
         can_run_cuda_graph = target_out.can_run_cuda_graph
