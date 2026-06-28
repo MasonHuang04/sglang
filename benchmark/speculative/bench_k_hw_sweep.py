@@ -58,6 +58,10 @@ GSM8K_URL = (
     "https://raw.githubusercontent.com/openai/grade-school-math/master/"
     "grade_school_math/data/test.jsonl"
 )
+MT_BENCH_URL = (
+    "https://raw.githubusercontent.com/lm-sys/FastChat/main/"
+    "fastchat/llm_judge/data/mt_bench/question.jsonl"
+)
 RTX_6000_ADA_PEAK_TFLOPS_FP16 = 362.1
 RTX_6000_ADA_MEMORY_BW_GBPS = 960.0
 DEFAULT_ROOFLINE_MULTIPLIERS = [0.5, 0.8, 0.9, 1.0, 1.1, 1.2, 1.5, 2.0, 3.0, 4.0]
@@ -114,8 +118,121 @@ def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
     return records
 
 
+def read_json_records(path: str | Path) -> list[dict[str, Any]]:
+    path = Path(path)
+    if path.suffix == ".json":
+        with open(path, encoding="utf-8") as fin:
+            payload = json.load(fin)
+        if isinstance(payload, list):
+            return [record for record in payload if isinstance(record, dict)]
+        if isinstance(payload, dict):
+            for key in ("data", "examples", "questions", "prompts"):
+                value = payload.get(key)
+                if isinstance(value, list):
+                    return [record for record in value if isinstance(record, dict)]
+            return [payload]
+        raise ValueError(f"Unsupported JSON payload in {path}")
+    return read_jsonl(path)
+
+
 def read_profile_records(profile_glob: str) -> dict[str, list[dict[str, Any]]]:
     return {path: read_jsonl(path) for path in sorted(glob.glob(profile_glob))}
+
+
+def get_nested_value(record: dict[str, Any], field: str) -> Any:
+    value: Any = record
+    for part in field.split("."):
+        if isinstance(value, dict):
+            value = value.get(part)
+        elif isinstance(value, list) and part.isdigit():
+            index = int(part)
+            value = value[index] if index < len(value) else None
+        else:
+            return None
+    return value
+
+
+def stringify_prompt_value(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        parts = []
+        for item in value:
+            if isinstance(item, dict):
+                content = item.get("content") or item.get("value") or item.get("text")
+                if content:
+                    role = item.get("role") or item.get("from")
+                    if role:
+                        parts.append(f"{role}: {content}")
+                    else:
+                        parts.append(str(content))
+            else:
+                parts.append(str(item))
+        return "\n".join(parts)
+    return str(value)
+
+
+def infer_prompt_from_record(
+    record: dict[str, Any],
+    prompt_fields: list[str],
+) -> str:
+    if prompt_fields:
+        parts = [
+            stringify_prompt_value(get_nested_value(record, field)).strip()
+            for field in prompt_fields
+        ]
+        return "\n\n".join(part for part in parts if part)
+
+    for field in ("prompt", "text", "question", "instruction", "input", "query"):
+        value = stringify_prompt_value(record.get(field)).strip()
+        if value:
+            return value
+
+    for field in ("messages", "conversations", "turns"):
+        value = stringify_prompt_value(record.get(field)).strip()
+        if value:
+            return value
+
+    raise ValueError(
+        "Could not infer prompt field. Pass --prompt-fields with comma-separated "
+        "JSON keys, for example --prompt-fields instruction,input."
+    )
+
+
+def load_json_prompts(
+    *,
+    data_path: str,
+    prompt_fields: list[str],
+    num_prompts: int,
+) -> list[str]:
+    records = read_json_records(data_path)
+    prompts = [infer_prompt_from_record(record, prompt_fields) for record in records]
+    prompts = [prompt for prompt in prompts if prompt]
+    if num_prompts > 0:
+        prompts = prompts[:num_prompts]
+    return prompts
+
+
+def load_mt_bench_prompts(
+    *,
+    data_path: str,
+    num_prompts: int,
+) -> list[str]:
+    records = read_json_records(data_path)
+    prompts = []
+    for record in records:
+        turns = record.get("turns")
+        if not isinstance(turns, list):
+            continue
+        for turn in turns:
+            turn_text = stringify_prompt_value(turn).strip()
+            if turn_text:
+                prompts.append(f"Question: {turn_text}\nAnswer:")
+    if num_prompts > 0:
+        prompts = prompts[:num_prompts]
+    return prompts
 
 
 def gsm8k_example(line: dict[str, Any], *, include_answer: bool) -> str:
@@ -158,6 +275,48 @@ def load_prompt_pool(args: argparse.Namespace) -> tuple[list[str], dict[str, Any
             "num_prompts": len(BUILTIN_PROMPTS),
         }
 
+    if args.prompt_source == "mt-bench":
+        data_path = args.prompt_data_path
+        downloaded = False
+        if not data_path:
+            data_path = str(args.output_dir / "mt_bench_question.jsonl")
+            data_path = download_and_cache_file(MT_BENCH_URL, filename=data_path)
+            downloaded = True
+        prompts = load_mt_bench_prompts(
+            data_path=data_path,
+            num_prompts=args.num_prompts,
+        )
+        if not prompts:
+            raise ValueError("MT-Bench prompt pool is empty.")
+        return prompts, {
+            "source": "mt-bench",
+            "data_path": data_path,
+            "downloaded": downloaded,
+            "num_prompts": len(prompts),
+            "turns_as_independent_prompts": True,
+            "url": MT_BENCH_URL if downloaded else None,
+        }
+
+    if args.prompt_source in ("json", "spec-bench"):
+        if not args.prompt_data_path:
+            raise ValueError(
+                f"--prompt-data-path is required for --prompt-source={args.prompt_source}."
+            )
+        prompt_fields = parse_field_list(args.prompt_fields)
+        prompts = load_json_prompts(
+            data_path=args.prompt_data_path,
+            prompt_fields=prompt_fields,
+            num_prompts=args.num_prompts,
+        )
+        if not prompts:
+            raise ValueError(f"{args.prompt_source} prompt pool is empty.")
+        return prompts, {
+            "source": args.prompt_source,
+            "data_path": args.prompt_data_path,
+            "num_prompts": len(prompts),
+            "prompt_fields": prompt_fields,
+        }
+
     data_path = args.gsm8k_data_path
     downloaded = False
     if not data_path:
@@ -195,12 +354,12 @@ def validate_prompt_coverage(
     args: argparse.Namespace,
     prompt_pool: list[str],
 ) -> None:
-    if args.prompt_source != "gsm8k":
+    if args.prompt_source == "builtin":
         return
 
     if len(prompt_pool) < args.min_measured_prompts:
         raise ValueError(
-            f"GSM8K prompt pool has only {len(prompt_pool)} prompts, but "
+            f"{args.prompt_source} prompt pool has only {len(prompt_pool)} prompts, but "
             f"--min-measured-prompts requires at least {args.min_measured_prompts}."
         )
 
@@ -212,6 +371,10 @@ def validate_prompt_coverage(
                 f"would send only {measured_prompt_requests} measured prompts. "
                 f"Increase --measure-rounds or lower --min-measured-prompts."
             )
+
+
+def parse_field_list(value: str) -> list[str]:
+    return [field.strip() for field in value.split(",") if field.strip()]
 
 
 def load_target_model_shape(model_path: str) -> tuple[TargetModelShape, dict[str, Any]]:
@@ -803,7 +966,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--speculative-eagle-topk", type=int, default=1)
     parser.add_argument(
         "--prompt-source",
-        choices=["builtin", "gsm8k"],
+        choices=["builtin", "gsm8k", "mt-bench", "json", "spec-bench"],
         default="gsm8k",
         help="Prompt pool used to drive speculative decode.",
     )
@@ -817,7 +980,23 @@ def parse_args() -> argparse.Namespace:
         "--num-prompts",
         type=int,
         default=0,
-        help="Number of GSM8K eval prompts to load after few-shot rows; 0 means all.",
+        help="Number of prompts to load; 0 means all.",
+    )
+    parser.add_argument(
+        "--prompt-data-path",
+        default=None,
+        help=(
+            "Optional dataset path for prompt-source=mt-bench/json/spec-bench. "
+            "MT-Bench downloads the official question file when omitted."
+        ),
+    )
+    parser.add_argument(
+        "--prompt-fields",
+        default="",
+        help=(
+            "Comma-separated JSON fields for prompt-source=json/spec-bench. "
+            "Dotted paths and list indexes are supported, e.g. messages.0.content."
+        ),
     )
     parser.add_argument(
         "--min-measured-prompts",
