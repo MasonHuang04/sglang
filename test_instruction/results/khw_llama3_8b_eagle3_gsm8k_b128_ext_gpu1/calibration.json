@@ -1,0 +1,204 @@
+{
+  "draft_model": "/home/hhuang/.cache/huggingface/yuhuili/sglang-eagle3-8b",
+  "hardware": {
+    "bytes_per_weight": 2.0,
+    "dense_weight_bytes": 13958643712.0,
+    "memory_bw_gbps": 960.0,
+    "peak_tflops": 362.1
+  },
+  "k_hw_by_batch": {
+    "128": {
+      "arithmetic_intensity_dense": 2048.0,
+      "batch_size": 128,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 16,
+      "estimated_dense_tflops_mean": 86.0868337911754,
+      "estimated_total_tflops_mean": 88.46883674016289,
+      "k_proposed_drafts": 1920,
+      "k_verify_tokens": 2048,
+      "latency_ms_mean": 332.592333984375,
+      "latency_ms_p50": 335.425537109375,
+      "latency_ms_p90": 340.27520751953125,
+      "measured_prompt_requests": 256,
+      "measured_unique_prompt_count": 256,
+      "next_relative_marginal_gain": 0.023716269671767192,
+      "num_records": 10,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b128_ext_gpu1/spec_verify_B128_L16_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 5781.822958189345,
+      "seq_lens_sum_mean": 94307.3,
+      "verify_tokens_per_s_max": 6897.7406767403545,
+      "verify_tokens_per_s_mean": 6167.277822068634,
+      "warmup_prompt_requests": 128
+    }
+  },
+  "launch": {
+    "attention_backend": "triton",
+    "disable_cuda_graph": false,
+    "disable_overlap_schedule": true,
+    "dtype": "float16",
+    "enable_piecewise_cuda_graph": false,
+    "extra_server_args": "--context-length 2048",
+    "page_size": 1
+  },
+  "measurements": [
+    {
+      "arithmetic_intensity_dense": 2048.0,
+      "batch_size": 128,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 16,
+      "estimated_dense_tflops_mean": 86.0868337911754,
+      "estimated_total_tflops_mean": 88.46883674016289,
+      "k_proposed_drafts": 1920,
+      "k_verify_tokens": 2048,
+      "latency_ms_mean": 332.592333984375,
+      "latency_ms_p50": 335.425537109375,
+      "latency_ms_p90": 340.27520751953125,
+      "measured_prompt_requests": 256,
+      "measured_unique_prompt_count": 256,
+      "num_records": 10,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b128_ext_gpu1/spec_verify_B128_L16_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 5781.822958189345,
+      "seq_lens_sum_mean": 94307.3,
+      "verify_tokens_per_s_max": 6897.7406767403545,
+      "verify_tokens_per_s_mean": 6167.277822068634,
+      "warmup_prompt_requests": 128
+    },
+    {
+      "arithmetic_intensity_dense": 2560.0,
+      "batch_size": 128,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 20,
+      "estimated_dense_tflops_mean": 88.12849235655551,
+      "estimated_total_tflops_mean": 90.56723031666729,
+      "k_proposed_drafts": 2432,
+      "k_verify_tokens": 2560,
+      "latency_ms_mean": 405.6425506591797,
+      "latency_ms_p50": 406.2141571044922,
+      "latency_ms_p90": 407.31854248046875,
+      "measured_prompt_requests": 256,
+      "measured_unique_prompt_count": 256,
+      "num_records": 10,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b128_ext_gpu1/spec_verify_B128_L20_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 5997.865513735647,
+      "seq_lens_sum_mean": 94306.7,
+      "verify_tokens_per_s_max": 6635.312840867653,
+      "verify_tokens_per_s_mean": 6313.542646037523,
+      "warmup_prompt_requests": 128
+    },
+    {
+      "arithmetic_intensity_dense": 3072.0,
+      "batch_size": 128,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 24,
+      "estimated_dense_tflops_mean": 88.74891816926862,
+      "estimated_total_tflops_mean": 91.2047889789995,
+      "k_proposed_drafts": 2944,
+      "k_verify_tokens": 3072,
+      "latency_ms_mean": 483.3239044189453,
+      "latency_ms_p50": 484.19737243652344,
+      "latency_ms_p90": 486.640625,
+      "measured_prompt_requests": 256,
+      "measured_unique_prompt_count": 256,
+      "num_records": 10,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b128_ext_gpu1/spec_verify_B128_L24_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 6093.073821045059,
+      "seq_lens_sum_mean": 94305.5,
+      "verify_tokens_per_s_max": 6640.708718405633,
+      "verify_tokens_per_s_mean": 6357.990074133975,
+      "warmup_prompt_requests": 128
+    },
+    {
+      "arithmetic_intensity_dense": 4096.0,
+      "batch_size": 128,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 32,
+      "estimated_dense_tflops_mean": 83.97246082691564,
+      "estimated_total_tflops_mean": 86.29618996505016,
+      "k_proposed_drafts": 3968,
+      "k_verify_tokens": 4096,
+      "latency_ms_mean": 680.9987060546875,
+      "latency_ms_p50": 683.4216918945312,
+      "latency_ms_p90": 687.7142944335938,
+      "measured_prompt_requests": 256,
+      "measured_unique_prompt_count": 256,
+      "num_records": 10,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b128_ext_gpu1/spec_verify_B128_L32_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 5827.809857783017,
+      "seq_lens_sum_mean": 94307.9,
+      "verify_tokens_per_s_max": 6244.750728706166,
+      "verify_tokens_per_s_mean": 6015.803724163114,
+      "warmup_prompt_requests": 128
+    }
+  ],
+  "method": "roofline_guided_profile_calibrated_k_hw",
+  "model": "/home/hhuang/.cache/huggingface/LLM-Research/llama_3_1",
+  "model_config": {
+    "model_type": "llama",
+    "source": "/home/hhuang/.cache/huggingface/LLM-Research/llama_3_1/config.json"
+  },
+  "prompt_source": {
+    "data_path": "test_instruction/results/khw_gsm8k_loader_check/gsm8k_test.jsonl",
+    "downloaded": false,
+    "measured_prompt_requests_by_batch": {
+      "128": 256
+    },
+    "measured_unique_prompt_count_by_batch": {
+      "128": 256
+    },
+    "min_measured_prompts": 50,
+    "num_prompts": 256,
+    "num_shots": 5,
+    "source": "gsm8k",
+    "url": null
+  },
+  "roofline": {
+    "candidate_run_grid": {
+      "128": [
+        16,
+        20,
+        24,
+        32
+      ]
+    },
+    "k_roof": 377.1875,
+    "multipliers": [
+      0.5,
+      0.8,
+      0.9,
+      1.0,
+      1.1,
+      1.2,
+      1.5,
+      2.0,
+      3.0,
+      4.0
+    ]
+  },
+  "selection": {
+    "marginal_gain_epsilon": 0.05,
+    "rho": 0.9
+  },
+  "speculative_algorithm": "EAGLE3",
+  "target_model_shape": {
+    "hidden_size": 4096,
+    "intermediate_size": 14336,
+    "num_attention_heads": 32,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 8
+  }
+}

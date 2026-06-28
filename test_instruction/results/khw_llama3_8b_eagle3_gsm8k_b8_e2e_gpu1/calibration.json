@@ -1,0 +1,330 @@
+{
+  "draft_model": "/home/hhuang/.cache/huggingface/yuhuili/sglang-eagle3-8b",
+  "hardware": {
+    "bytes_per_weight": 2.0,
+    "dense_weight_bytes": 13958643712.0,
+    "memory_bw_gbps": 960.0,
+    "peak_tflops": 362.1
+  },
+  "k_hw_by_batch": {
+    "8": {
+      "arithmetic_intensity_dense": 512.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 64,
+      "e2e_accept_length_from_meta": 1.6739841195702942,
+      "e2e_batch_latency_ms_mean": 6510.39059107591,
+      "e2e_batch_latency_ms_p50": 6584.072174038738,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 78.64351498385086,
+      "e2e_spec_verify_ct_total": 2141,
+      "estimated_dense_tflops_mean": 99.86310854531578,
+      "estimated_total_tflops_mean": 102.68076732770275,
+      "k_proposed_drafts": 504,
+      "k_verify_tokens": 512,
+      "latency_ms_mean": 71.62747483456869,
+      "latency_ms_p50": 71.72198486328125,
+      "latency_ms_p90": 73.54061126708984,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 211,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L64_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 7042.428297656605,
+      "seq_lens_sum_mean": 6010.611374407583,
+      "verify_tokens_per_s_max": 8833.454124625549,
+      "verify_tokens_per_s_mean": 7154.212873809884,
+      "warmup_prompt_requests": 8
+    }
+  },
+  "launch": {
+    "attention_backend": "triton",
+    "disable_cuda_graph": false,
+    "disable_overlap_schedule": true,
+    "dtype": "float16",
+    "enable_piecewise_cuda_graph": false,
+    "extra_server_args": "--context-length 2048",
+    "page_size": 1
+  },
+  "measurements": [
+    {
+      "arithmetic_intensity_dense": 16.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 2,
+      "e2e_accept_length_from_meta": 1.4093590247738892,
+      "e2e_batch_latency_ms_mean": 1307.9436535148748,
+      "e2e_batch_latency_ms_p50": 1306.6607969813049,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 391.45417206933,
+      "e2e_spec_verify_ct_total": 2543,
+      "estimated_dense_tflops_mean": 10.525243145891448,
+      "estimated_total_tflops_mean": 10.823665774752312,
+      "k_proposed_drafts": 8,
+      "k_verify_tokens": 16,
+      "latency_ms_mean": 21.227251679652994,
+      "latency_ms_p50": 21.155839920043945,
+      "latency_ms_p90": 21.337087631225586,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 283,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L2_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 377.0152517340593,
+      "seq_lens_sum_mean": 6038.406360424028,
+      "verify_tokens_per_s_max": 764.4698560708205,
+      "verify_tokens_per_s_mean": 754.0305034681186,
+      "warmup_prompt_requests": 8
+    },
+    {
+      "arithmetic_intensity_dense": 32.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 4,
+      "e2e_accept_length_from_meta": 1.6305732484076434,
+      "e2e_batch_latency_ms_mean": 1360.471079857754,
+      "e2e_batch_latency_ms_p50": 1384.3239746056497,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 376.34023066005415,
+      "e2e_spec_verify_ct_total": 2198,
+      "estimated_dense_tflops_mean": 19.88054801811749,
+      "estimated_total_tflops_mean": 20.442265782784837,
+      "k_proposed_drafts": 24,
+      "k_verify_tokens": 32,
+      "latency_ms_mean": 22.485717345780856,
+      "latency_ms_p50": 22.330368041992188,
+      "latency_ms_p90": 22.71232032775879,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 223,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L4_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 1068.1847979807594,
+      "seq_lens_sum_mean": 6017.035874439462,
+      "verify_tokens_per_s_max": 1449.9814271325654,
+      "verify_tokens_per_s_mean": 1424.2463973076792,
+      "warmup_prompt_requests": 8
+    },
+    {
+      "arithmetic_intensity_dense": 64.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 8,
+      "e2e_accept_length_from_meta": 1.673202614379085,
+      "e2e_batch_latency_ms_mean": 1582.3281606260155,
+      "e2e_batch_latency_ms_p50": 1613.672780804336,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 323.57384058527896,
+      "e2e_spec_verify_ct_total": 2142,
+      "estimated_dense_tflops_mean": 38.2753364081985,
+      "estimated_total_tflops_mean": 39.355770700257914,
+      "k_proposed_drafts": 56,
+      "k_verify_tokens": 64,
+      "latency_ms_mean": 23.352329641018272,
+      "latency_ms_p50": 23.228928565979004,
+      "latency_ms_p90": 23.5100154876709,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 212,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L8_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 2399.2960955355666,
+      "seq_lens_sum_mean": 6011.58962264151,
+      "verify_tokens_per_s_max": 2783.592297660192,
+      "verify_tokens_per_s_mean": 2742.052680612076,
+      "warmup_prompt_requests": 8
+    },
+    {
+      "arithmetic_intensity_dense": 128.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 16,
+      "e2e_accept_length_from_meta": 1.6739841195702942,
+      "e2e_batch_latency_ms_mean": 2008.9761045362268,
+      "e2e_batch_latency_ms_p50": 2060.1113121956587,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 254.85619208905197,
+      "e2e_spec_verify_ct_total": 2141,
+      "estimated_dense_tflops_mean": 70.9897055042234,
+      "estimated_total_tflops_mean": 72.99279799596708,
+      "k_proposed_drafts": 120,
+      "k_verify_tokens": 128,
+      "latency_ms_mean": 25.18270026615688,
+      "latency_ms_p50": 25.040383338928223,
+      "latency_ms_p90": 25.590784072875977,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 210,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L16_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 4767.8592765424,
+      "seq_lens_sum_mean": 6009.085714285714,
+      "verify_tokens_per_s_max": 5216.375109035822,
+      "verify_tokens_per_s_mean": 5085.716561645227,
+      "warmup_prompt_requests": 8
+    },
+    {
+      "arithmetic_intensity_dense": 256.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 32,
+      "e2e_accept_length_from_meta": 1.676333021515435,
+      "e2e_batch_latency_ms_mean": 3426.532952580601,
+      "e2e_batch_latency_ms_p50": 3474.686832167208,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 149.42217310777676,
+      "e2e_spec_verify_ct_total": 2138,
+      "estimated_dense_tflops_mean": 92.61035720812474,
+      "estimated_total_tflops_mean": 95.22297233822896,
+      "k_proposed_drafts": 248,
+      "k_verify_tokens": 256,
+      "latency_ms_mean": 38.63100183857561,
+      "latency_ms_p50": 38.811649322509766,
+      "latency_ms_p90": 40.01996612548828,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 211,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L32_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 6427.292321262082,
+      "seq_lens_sum_mean": 6010.45971563981,
+      "verify_tokens_per_s_max": 7916.402506867841,
+      "verify_tokens_per_s_mean": 6634.624331625374,
+      "warmup_prompt_requests": 8
+    },
+    {
+      "arithmetic_intensity_dense": 512.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 64,
+      "e2e_accept_length_from_meta": 1.6739841195702942,
+      "e2e_batch_latency_ms_mean": 6510.39059107591,
+      "e2e_batch_latency_ms_p50": 6584.072174038738,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 78.64351498385086,
+      "e2e_spec_verify_ct_total": 2141,
+      "estimated_dense_tflops_mean": 99.86310854531578,
+      "estimated_total_tflops_mean": 102.68076732770275,
+      "k_proposed_drafts": 504,
+      "k_verify_tokens": 512,
+      "latency_ms_mean": 71.62747483456869,
+      "latency_ms_p50": 71.72198486328125,
+      "latency_ms_p90": 73.54061126708984,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 211,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L64_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 7042.428297656605,
+      "seq_lens_sum_mean": 6010.611374407583,
+      "verify_tokens_per_s_max": 8833.454124625549,
+      "verify_tokens_per_s_mean": 7154.212873809884,
+      "warmup_prompt_requests": 8
+    }
+  ],
+  "method": "roofline_guided_profile_calibrated_k_hw",
+  "model": "/home/hhuang/.cache/huggingface/LLM-Research/llama_3_1",
+  "model_config": {
+    "model_type": "llama",
+    "source": "/home/hhuang/.cache/huggingface/LLM-Research/llama_3_1/config.json"
+  },
+  "prompt_source": {
+    "data_path": "test_instruction/results/khw_gsm8k_loader_check/gsm8k_test.jsonl",
+    "downloaded": false,
+    "measured_prompt_requests_by_batch": {
+      "8": 56
+    },
+    "measured_unique_prompt_count_by_batch": {
+      "8": 56
+    },
+    "min_measured_prompts": 50,
+    "num_prompts": 256,
+    "num_shots": 5,
+    "source": "gsm8k",
+    "url": null
+  },
+  "roofline": {
+    "candidate_run_grid": {
+      "8": [
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ]
+    },
+    "k_roof": 377.1875,
+    "multipliers": [
+      0.5,
+      0.8,
+      0.9,
+      1.0,
+      1.1,
+      1.2,
+      1.5,
+      2.0,
+      3.0,
+      4.0
+    ]
+  },
+  "selection": {
+    "marginal_gain_epsilon": 0.05,
+    "rho": 0.9
+  },
+  "serving_best_by_batch": {
+    "8": {
+      "arithmetic_intensity_dense": 16.0,
+      "batch_size": 8,
+      "cuda_graph_rate": 1.0,
+      "draft_token_num": 2,
+      "e2e_accept_length_from_meta": 1.4093590247738892,
+      "e2e_batch_latency_ms_mean": 1307.9436535148748,
+      "e2e_batch_latency_ms_p50": 1306.6607969813049,
+      "e2e_completion_tokens_total": 3584,
+      "e2e_output_tokens_per_s": 391.45417206933,
+      "e2e_spec_verify_ct_total": 2543,
+      "estimated_dense_tflops_mean": 10.525243145891448,
+      "estimated_total_tflops_mean": 10.823665774752312,
+      "k_proposed_drafts": 8,
+      "k_verify_tokens": 16,
+      "latency_ms_mean": 21.227251679652994,
+      "latency_ms_p50": 21.155839920043945,
+      "latency_ms_p90": 21.337087631225586,
+      "measured_prompt_requests": 56,
+      "measured_unique_prompt_count": 56,
+      "num_records": 283,
+      "profile_files": [
+        "test_instruction/results/khw_llama3_8b_eagle3_gsm8k_b8_e2e_gpu1/spec_verify_B8_L2_tp0_dp0.jsonl"
+      ],
+      "prompt_pool_size": 256,
+      "proposed_drafts_per_s_mean": 377.0152517340593,
+      "seq_lens_sum_mean": 6038.406360424028,
+      "verify_tokens_per_s_max": 764.4698560708205,
+      "verify_tokens_per_s_mean": 754.0305034681186,
+      "warmup_prompt_requests": 8
+    }
+  },
+  "speculative_algorithm": "EAGLE3",
+  "target_model_shape": {
+    "hidden_size": 4096,
+    "intermediate_size": 14336,
+    "num_attention_heads": 32,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 8
+  }
+}
